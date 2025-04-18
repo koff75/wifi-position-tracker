@@ -127,7 +127,7 @@ Ensure you have [Node.js](https://nodejs.org/) (which includes npm) installed.
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-username/bssid-geolocator-node.git
+git clone https://github.com/koff75/bssid-geolocator-node.git
 cd bssid-geolocator-node
 
 # Install dependencies (this also generates the protobuf JS file)
