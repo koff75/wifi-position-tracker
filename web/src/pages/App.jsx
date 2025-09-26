@@ -423,28 +423,32 @@ export default function App() {
       <BgLines />
       <Meteors count={10} />
       <Sparkles count={90} />
-      <div className="min-h-screen text-neutral-900 flex items-center justify-center p-6">
+      <div className="min-h-screen text-neutral-900 flex items-center justify-center p-4 md:p-6">
         <div className="w-full max-w-3xl">
-          <div className="relative w-full mb-8">
+          <div className="relative w-full mb-6 md:mb-8">
             <Spotlight>
             <CometCard>
-            <div className="p-6 relative">
+            <div className="p-4 md:p-6 relative">
               <Pin3D />
-               <div className="mb-4">
+               <div className="mb-3 md:mb-4">
                  <LayoutTextFlip 
                    text="WiFi"
                    words={["Geolocation", "Triangulation", "Position Tracker", "Network Mapper"]}
                    duration={3000}
-                   className="text-3xl font-semibold tracking-tight"
+                   className="text-2xl md:text-3xl font-semibold tracking-tight"
                  />
                </div>
-               <p className="text-neutral-700">Enter a BSSID to locate its position on Google Maps.</p>
-              <form onSubmit={onSubmit} className="mt-6 flex gap-3">
+               <p className="text-neutral-700 text-sm md:text-base">Enter a BSSID to locate its position on Google Maps.</p>
+              <form onSubmit={onSubmit} className="mt-4 md:mt-6 flex flex-col sm:flex-row gap-3">
                 <input
-                  className="flex-1 rounded-xl border border-white/60 bg-white/70 backdrop-blur px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-500/60"
-                  placeholder="e.g. 00:11:22:33:44:55"
+                  className="flex-1 rounded-xl border border-white/60 bg-white/70 backdrop-blur px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-purple-500/60"
+                  placeholder="001122334455 or 00:11:22:33:44:55"
                   value={bssid}
                   onChange={e => setBssid(e.target.value)}
+                  inputMode="text"
+                  autoComplete="off"
+                  spellCheck="false"
+                  autoCapitalize="characters"
                 />
                 <StatefulButton
                   type="submit"

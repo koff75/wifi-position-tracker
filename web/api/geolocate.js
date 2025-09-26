@@ -1,7 +1,16 @@
 const { geolocateApple } = require('../lib/geolocate.js');
 
 function isValidBssid(bssid) {
-  return /^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/.test(bssid);
+  // More flexible BSSID validation - accepts various formats
+  const cleanBssid = String(bssid).replace(/[^0-9A-Fa-f]/g, '');
+  return cleanBssid.length === 12 && /^[0-9A-Fa-f]{12}$/.test(cleanBssid);
+}
+
+function normalizeBssid(bssid) {
+  // Clean and normalize BSSID to standard format
+  const cleanBssid = String(bssid).replace(/[^0-9A-Fa-f]/g, '').toLowerCase();
+  if (cleanBssid.length !== 12) return null;
+  return cleanBssid.match(/.{2}/g).join(':');
 }
 
 module.exports = async function handler(req, res) {
@@ -12,9 +21,10 @@ module.exports = async function handler(req, res) {
   try {
     const { bssid } = req.body || {};
     if (!bssid || !isValidBssid(bssid)) {
-      return res.status(400).json({ success: false, message: 'BSSID invalide. Format attendu: HH:HH:HH:HH:HH:HH' });
+      return res.status(400).json({ success: false, message: 'Invalid BSSID format. Please enter 12 hexadecimal characters (e.g., 001122334455 or 00:11:22:33:44:55)' });
     }
-    const results = await geolocateApple(String(bssid).toLowerCase());
+    const normalizedBssid = normalizeBssid(bssid);
+    const results = await geolocateApple(normalizedBssid);
     if (!results || results.length === 0) {
       return res.status(404).json({ success: false, message: 'Aucune localisation trouvée pour ce BSSID.' });
     }

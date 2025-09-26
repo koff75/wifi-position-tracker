@@ -12,12 +12,13 @@ function RealBSSIDDiscovery({ onDiscoveryComplete }) {
     setError('')
     setLoading(true)
 
-    const bssidRegex = /^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/
-        if (!bssidRegex.test(bssid)) {
-          setError('Invalid BSSID format. Use format HH:HH:HH:HH:HH:HH')
-          setLoading(false)
-          return
-        }
+    // More flexible validation - let server handle normalization
+    const cleanBssid = bssid.replace(/[^0-9A-Fa-f]/g, '')
+    if (cleanBssid.length !== 12) {
+      setError('Invalid BSSID format. Please enter 12 hexadecimal characters')
+      setLoading(false)
+      return
+    }
 
     try {
       console.log('🎯 Discovery via real BSSID:', bssid)
@@ -67,12 +68,16 @@ function RealBSSIDDiscovery({ onDiscoveryComplete }) {
             type="text"
             value={bssid}
             onChange={(e) => setBssid(e.target.value)}
-            placeholder="ex: 3a:07:16:a3:61:a4"
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 font-mono"
+            placeholder="3a0716a361a4 or 3a:07:16:a3:61:a4"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 font-mono text-base"
             disabled={loading}
+            inputMode="text"
+            autoComplete="off"
+            spellCheck="false"
+            autoCapitalize="characters"
           />
           <p className="text-xs text-gray-500 mt-1">
-            Required format: HH:HH:HH:HH:HH:HH (with or without :)
+            Enter 12 hexadecimal characters (with or without colons)
           </p>
         </div>
 
