@@ -50,16 +50,16 @@ function RealBSSIDDiscovery({ onDiscoveryComplete }) {
   }
 
   return (
-    <div className="bg-gradient-to-r from-purple-50 to-blue-50 rounded-2xl p-6 border border-purple-200">
-      <div className="flex items-center mb-4">
-        <span className="text-3xl mr-3">📱</span>
+    <div className="bg-gradient-to-r from-purple-50 to-blue-50 rounded-2xl p-3 md:p-6 border border-purple-200 mx-2 md:mx-0">
+      <div className="flex items-center mb-3 md:mb-4">
+        <span className="text-2xl md:text-3xl mr-2 md:mr-3">📱</span>
         <div>
-        <h3 className="text-xl font-bold text-gray-900">Real iPhone Triangulation</h3>
-        <p className="text-sm text-gray-600">Discover ALL networks around your connected iPhone</p>
+        <h3 className="text-lg md:text-xl font-bold text-gray-900">Real iPhone Triangulation</h3>
+        <p className="text-xs md:text-sm text-gray-600">Discover ALL networks around your connected iPhone</p>
         </div>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-3 md:space-y-4">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
             BSSID of your current WiFi network
