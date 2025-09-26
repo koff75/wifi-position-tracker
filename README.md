@@ -1,4 +1,4 @@
-# 📡 WiFi Tracker - Professional Network Geolocation
+# 📡 WiFi Tracker - Network Geolocation
 
 **🌐 Live Demo:** [wifitracker.fun](https://wifitracker.fun)
 
