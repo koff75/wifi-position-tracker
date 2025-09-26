@@ -3,9 +3,10 @@ const https = require('https');
 
 let bssidMessages;
 try {
+  // From /web/lib/ to /web/bssid_pb.js
   bssidMessages = require('../bssid_pb.js');
 } catch (error) {
-  console.error("Erreur: Impossible de charger 'bssid_pb.js'. Générez-le avec 'npm run generate-proto'.");
+  console.error("Erreur: Impossible de charger 'bssid_pb.js'. web/lib'.");
   throw error;
 }
 
