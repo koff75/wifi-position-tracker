@@ -1,0 +1,26 @@
+{
+  "name": "wifitracker-web",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Professional WiFi Network Geolocation & BSSID Triangulation Tool",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build && npm run generate-sitemap",
+    "preview": "vite preview -p 5173",
+    "generate-sitemap": "echo 'Sitemap already created manually'"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.2.1",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.47",
+    "tailwindcss": "^3.4.13",
+    "vite": "^5.4.8"
+  }
+}
+
+

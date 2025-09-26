@@ -1,0 +1,23 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://wifitracker.fun/sitemap.xml
+
+# Crawl-delay
+Crawl-delay: 1
+
+# Specific rules for search engines
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Slurp
+Allow: /
+
+# Block unnecessary crawling
+Disallow: /api/
+Disallow: /*.json$
+Disallow: /node_modules/

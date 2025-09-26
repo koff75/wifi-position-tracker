@@ -3,18 +3,18 @@ node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-package-lock.json
 
 # Generated protobuf files
 bssid_pb.js
 
 # Output files
 *.kml
-*.json
 *.tsv
 scanned_wifi_map.kml
 output.json
 output.tsv
+web/node_modules/
+web/dist/
 
 # Editor files
 .vscode/

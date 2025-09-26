@@ -13,6 +13,13 @@ const pLimit = pLimitImport.default || pLimitImport;
 const inquirerImport = require('inquirer');
 const inquirer = inquirerImport.default || inquirerImport;
 
+let DEBUG = false;
+function logDebug() {
+    if (DEBUG) {
+        console.log('[DEBUG]', ...arguments);
+    }
+}
+
 let bssidMessages;
 try {
     bssidMessages = require('./bssid_pb');
@@ -90,6 +97,7 @@ async function geolocateApple(bssid) {
     const url = 'https://gs-loc.apple.com/clls/wloc';
 
     try {
+        logDebug('POST', url, 'payloadBytes', data.length, 'bssid', bssid);
         const requestTimestamp = Date.now(); // Timestamp avant la requête
         const response = await axios.post(url, data, {
             headers: headers,
@@ -99,9 +107,12 @@ async function geolocateApple(bssid) {
 
         // Ignorer les 10 premiers octets de la réponse
         const responseData = Buffer.from(response.data).slice(10);
+        logDebug('HTTP', response.status, 'contentLength', response.headers && (response.headers['content-length'] || response.headers['Content-Length']));
+        logDebug('responseBytesAfterSlice', responseData.length);
 
         // Décoder le message Protobuf
         const bssidResponse = WiFiLocation.decode(responseData);
+        logDebug('decoded.wifi.count', (bssidResponse.wifi || []).length);
 
         const geos = [];
 
@@ -139,6 +150,7 @@ async function geolocateApple(bssid) {
              if (lat === -180 && lon === -180) {
                  finalChannel = 0;
                  finalHacc = -1;
+                logDebug('apple.sentinel.notFound', { bssid: wifi.bssid });
              }
 
             geos.push({
@@ -582,6 +594,11 @@ async function main() {
                 describe: 'Path to previous JSON results file for movement comparison',
                 type: 'string',
             })
+            .option('debug', {
+                describe: 'Enable verbose debug logs',
+                type: 'boolean',
+                default: false,
+            })
             .option('movement-only', {
                  describe: 'Output only BSSIDs that have moved significantly',
                  type: 'boolean',
@@ -628,6 +645,7 @@ async function main() {
                 process.exit(1);
             })
             .argv;
+            DEBUG = !!config.debug;
              // Déterminer si la sortie console est nécessaire (si aucune sortie fichier n'est demandée)
              config.toStdout = !config.kml && !config.jsonOut && !config.outfile;
     }

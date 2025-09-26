@@ -1,0 +1,74 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+@keyframes sparkleFloat {
+  0% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-20px) scale(1.2); }
+  100% { transform: translateY(0) scale(1); }
+}
+.sparkle {
+  position: absolute;
+  background: radial-gradient(circle, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0) 70%);
+  border-radius: 9999px;
+  animation-name: sparkleFloat;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
+  filter: drop-shadow(0 0 6px rgba(255,255,255,0.6));
+}
+
+@keyframes meteorFly {
+  0% { transform: translate3d(0,0,0) rotate(35deg); opacity: 0; }
+  10% { opacity: 1; }
+  100% { transform: translate3d(300px, 300px, 0) rotate(35deg); opacity: 0; }
+}
+.meteor {
+  position: absolute;
+  width: 120px;
+  height: 2px;
+  background: linear-gradient(90deg, rgba(255,255,255,0.9), rgba(255,255,255,0));
+  border-radius: 9999px;
+  transform: rotate(35deg);
+  animation-name: meteorFly;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in;
+  filter: drop-shadow(0 0 8px rgba(255,255,255,0.6));
+}
+
+@keyframes glowPulse {
+  0% { opacity: .35; filter: blur(12px) hue-rotate(0deg); }
+  50% { opacity: .6; filter: blur(16px) hue-rotate(30deg); }
+  100% { opacity: .35; filter: blur(12px) hue-rotate(0deg); }
+}
+.glow-animated {
+  background: conic-gradient(from 0deg, rgba(56,189,248,.6), rgba(147,51,234,.5), rgba(244,63,94,.5), rgba(56,189,248,.6));
+  animation: glowPulse 6s ease-in-out infinite;
+  border-radius: 20px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+.btn-spinner {
+  width: 16px; height: 16px;
+  border: 2px solid rgba(255,255,255,.6);
+  border-top-color: #fff;
+  border-radius: 9999px;
+  animation: spin 1s linear infinite;
+}
+.btn-check {
+  width: 16px; height: 16px;
+  border-radius: 9999px;
+  background: #10b981;
+  position: relative;
+}
+.btn-check::after {
+  content: '';
+  position: absolute; left: 4px; top: 2px;
+  width: 6px; height: 10px;
+  border-right: 2px solid white;
+  border-bottom: 2px solid white;
+  transform: rotate(45deg);
+}
+
+
