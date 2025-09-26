@@ -1,6 +1,7 @@
 {
-  "buildCommand": "cd web && npm run build",
+  "buildCommand": "cd web && npm install && npm run build",
   "outputDirectory": "web/dist",
+  "installCommand": "cd web && npm install",
   "rewrites": [
     { "source": "/robots.txt", "destination": "/web/dist/robots.txt" },
     { "source": "/sitemap.xml", "destination": "/web/dist/sitemap.xml" },
