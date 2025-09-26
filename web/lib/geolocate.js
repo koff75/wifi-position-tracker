@@ -4,9 +4,10 @@ const https = require('https');
 let bssidMessages;
 try {
   // From /web/lib/ to /web/bssid_pb.js
-  bssidMessages = require('../bssid_pb.js');
+  bssidMessages = require('../bssid_pb');
 } catch (error) {
-  console.error("Erreur: Impossible de charger 'bssid_pb.js'. web/lib'.");
+  console.error("Erreur: Impossible de charger 'bssid_pb.js'. Erreur:", error.message);
+  console.error("Chemin testé: ../bssid_pb depuis", __dirname);
   throw error;
 }
 
