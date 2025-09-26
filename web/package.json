@@ -3,7 +3,6 @@
   "private": true,
   "version": "1.0.0",
   "description": "Professional WiFi Network Geolocation & BSSID Triangulation Tool",
-  "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build && npm run generate-sitemap",
@@ -12,7 +11,9 @@
   },
   "dependencies": {
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "axios": "^1.7.7",
+    "protobufjs": "^7.3.2"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.2.1",
