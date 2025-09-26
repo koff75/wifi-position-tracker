@@ -1,4 +1,4 @@
-const { geolocateApple } = require('../lib/geolocate');
+const { geolocateApple } = require('../lib/geolocate.js');
 
 function isValidBssid(bssid) {
   return /^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/.test(bssid);

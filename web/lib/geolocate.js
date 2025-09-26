@@ -3,7 +3,7 @@ const https = require('https');
 
 let bssidMessages;
 try {
-  bssidMessages = require('../bssid_pb');
+  bssidMessages = require('../bssid_pb.js');
 } catch (error) {
   console.error("Erreur: Impossible de charger 'bssid_pb.js'. Générez-le avec 'npm run generate-proto'.");
   throw error;
