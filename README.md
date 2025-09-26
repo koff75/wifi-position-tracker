@@ -4,7 +4,7 @@
 
 > **Discover and geolocate any WiFi network worldwide using advanced BSSID triangulation technology**
 
-Transform any WiFi BSSID into precise GPS coordinates using Apple's WiFi Positioning System. Built with modern web technologies and professional-grade APIs.
+Transform any WiFi BSSID into precise GPS coordinates using WiFi Positioning. Built with modern web technologies.
 
 ![WiFi Tracker Demo](https://img.shields.io/badge/Demo-wifitracker.fun-blue?style=for-the-badge&logo=wifi)
 ![Tech Stack](https://img.shields.io/badge/Stack-React%20%7C%20Node.js%20%7C%20Apple%20WPS-purple?style=for-the-badge)
@@ -12,7 +12,7 @@ Transform any WiFi BSSID into precise GPS coordinates using Apple's WiFi Positio
 
 ## ✨ What Makes This Special?
 
-🎯 **Real iPhone Technology** - Uses the same Apple WPS API that powers iPhone location services  
+🎯 **iPhone Technology** - Uses the same Apple WPS API that powers location services  
 🗺️ **Live Interactive Maps** - Visualize networks with dynamic Google Maps integration  
 📱 **Professional Web Interface** - Modern React app with stunning UI effects  
 🔍 **Advanced Triangulation** - Discover ALL WiFi networks around any location  
@@ -22,8 +22,6 @@ Transform any WiFi BSSID into precise GPS coordinates using Apple's WiFi Positio
 ## 🚀 Quick Start
 
 **Try it now:** Just visit [wifitracker.fun](https://wifitracker.fun) and enter any BSSID!
-
-Example BSSID to test: `3a:07:16:a3:61:a4`
 
 ## 🌟 Core Features
 
@@ -41,27 +39,24 @@ Revolutionary feature that mimics iPhone's positioning system:
 - **Real-time filtering** by channel, distance, and accuracy
 - **Click any network** to open its location in Google Maps
 
-### ⚡ **Professional Tools**
-- **Advanced analytics** with network density and coverage radius
-- **Export capabilities** for security auditing and research
-- **Mobile-optimized** interface that works on any device
-
 ## 🛠️ Technology Stack
 
-**Frontend:**
-- ⚛️ **React.js** with Vite for lightning-fast development
-- 🎨 **Tailwind CSS** + **Aceternity UI** for stunning visual effects  
-- 🗺️ **Google Maps API** for interactive network visualization
+## Overview
+WiFi Tracker is a web application for WiFi network geolocation and BSSID triangulation using WPS API.
 
-**Backend:**
-- ⚡ **Node.js serverless functions** on Vercel
-- 🍎 **Apple WPS API** integration for accurate positioning
-- 📊 **Protocol Buffers** for efficient data communication
+## Key Features
+- 🎯 BSSID Geolocation
+- 📱 iPhone Triangulation Technology  
+- 🗺️ Interactive Google Maps
+- 🔍 Network Discovery
+- 📊 Advanced Analytics
 
-**Infrastructure:**
-- 🚀 **Vercel deployment** with global CDN
-- 🔒 **HTTPS-only** with security headers
-- 📱 **PWA-ready** with mobile optimization
+## Technology Stack
+- React.js + Vite
+- Tailwind CSS + Aceternity UI
+- Google Maps API
+- Node.js serverless functions
+- Vercel deployment
 
 ## 🧠 How It Works
 
@@ -72,29 +67,6 @@ WiFi Tracker leverages the same positioning technology that powers your iPhone's
 3. **Triangulation** → Get precise GPS coordinates + nearby network discovery
 4. **Visualization** → Interactive maps with real-time filtering and analytics
 
-> **Fun Fact:** When you enable WiFi positioning on your iPhone, it's using the exact same Apple WPS API that powers this tool!
-
-## 🎯 Use Cases
-
-**🔒 Security Professionals:**
-- WiFi network security auditing and penetration testing
-- Rogue access point detection and analysis  
-- Network infrastructure mapping and assessment
-
-**🏢 IT Administrators:**
-- WiFi coverage planning and optimization
-- Site surveys and signal strength analysis
-- Network troubleshooting and diagnostics
-
-**🔬 Researchers & Developers:**
-- Location-based services development and testing
-- Indoor positioning system research
-- WiFi database analysis and management
-
-**📊 Data Analysts:**
-- Network density studies and urban planning
-- Telecommunications infrastructure research
-- Geospatial analysis and visualization
 
 ## 💻 Local Development
 
@@ -115,52 +87,136 @@ npm run dev
 npm run build
 ```
 
-## 🔧 Command Line Tools (Optional)
+## 🔧 Command Line Tools - Professional Power Users
 
-For advanced users, this repository also includes Node.js CLI tools:
+Beyond the web interface, WiFi Tracker includes powerful Node.js CLI tools for advanced network analysis:
+
+### 📡 **scan_and_map.js** - Complete WiFi Environment Scanner
+
+**Ultimate WiFi reconnaissance tool** that scans, analyzes, and maps your entire WiFi environment:
 
 ```bash
-# Geolocate a single BSSID
-node bssid-geolocator.js -b 00:11:22:33:44:55
-
-# Process multiple BSSIDs from file
-node bssid-geolocator.js -f bssids.txt -k output.kml
-
-# Windows WiFi scanning and mapping
+# Full environment scan with security audit
 node scan_and_map.js
+
+# Debug mode for detailed analysis
+node scan_and_map.js --debug
 ```
 
-## 🌍 API & Performance
+**🎯 What it does:**
+- **🔍 Local WiFi Scanning** - Uses Windows `netsh` to discover ALL nearby networks
+- **🛡️ Security Audit** - Analyzes WEP/WPA/WPA3 security levels with color-coded warnings  
+- **📍 Mass Geolocation** - Geolocates every discovered BSSID via Apple's API
+- **📱 iPhone Simulation** - Shows how your iPhone triangulates using multiple access points
+- **🗺️ KML Export** - Generates Google Earth-compatible mapping files
+- **📊 Advanced Analytics** - Channel usage, density analysis, coverage statistics
 
-- **Accuracy**: Typically 10-50 meter precision using Apple's WPS database
-- **Speed**: Sub-second response times with global CDN  
-- **Coverage**: Worldwide WiFi network database via Apple's infrastructure
-- **Reliability**: 99.9% uptime with serverless architecture
+**Sample Output:**
+```
+🏠 RÉSEAUX WiFi DÉTECTÉS - AUDIT DE SÉCURITÉ
+═══════════════════════════════════════════════════════════════════════════
+SSID                     BSSID              SÉCURITÉ      SIGNAL  CANAL  GÉOLOC
+──────────────────────────────────────────────────────────────────────────
+MyWiFi                   aa:bb:cc:dd:ee:ff  WPA2-AES      85%     6      ✅ OUI
+OpenNetwork              11:22:33:44:55:66  CRITIQUE      45%     11     ✅ OUI
+   ⚠️  Réseau ouvert - Aucune sécurité
 
-## 🤝 Contributing
+📱 SIMULATION iPhone : 47 points d'accès utilisés pour triangulation
+📍 Position estimée : 48.8566, 2.3522 (±15m précision)
+```
 
-Found a bug or have a feature idea? We'd love your help!
+### 🌍 **bssid-geolocator.js** - Advanced BSSID Intelligence
 
-1. 🍴 **Fork** this repository
-2. 🌿 **Create** your feature branch (`git checkout -b feature/amazing-feature`)
-3. 💾 **Commit** your changes (`git commit -m 'Add amazing feature'`)
-4. 📤 **Push** to the branch (`git push origin feature/amazing-feature`)
-5. 🔄 **Open** a Pull Request
+**Production-grade geolocation engine** with enterprise features:
 
-## 📜 License & Disclaimer
+```bash
+# Single BSSID with detailed output
+node bssid-geolocator.js -b 00:11:22:33:44:55
+
+# Batch processing from file
+node bssid-geolocator.js -f bssids.txt -j results.json
+
+# Interactive configuration mode
+node bssid-geolocator.js -i
+
+# Movement tracking and comparison
+node bssid-geolocator.js -f bssids.txt --compare previous.json --movement-only
+
+# High-precision filtering
+node bssid-geolocator.js -f bssids.txt --max-hacc 50 -c 10
+```
+
+**🚀 Advanced Features:**
+
+#### **📊 Multiple Output Formats**
+```bash
+# KML for Google Earth visualization
+-k output.kml
+
+# JSON for programmatic analysis  
+-j results.json
+
+# TSV for spreadsheet analysis
+-o data.tsv
+
+# Console output with real-time stats
+(default stdout)
+```
+
+#### **🔍 Movement Detection & Tracking**
+```bash
+# Compare with previous scan to detect moved access points
+--compare previous.json
+
+# Only show networks that moved significantly  
+--movement-only --min-distance 100
+
+# Track AP movements over time with timestamps
+```
+
+#### **⚡ Performance & Accuracy Controls**
+```bash
+# Concurrent processing (1-50 simultaneous requests)
+-c 10
+
+# Accuracy filtering (only high-precision results)
+--max-hacc 25
+
+# Debug mode for API analysis
+--debug
+```
+
+#### **🎯 Sample Advanced Workflow**
+```bash
+# Day 1: Initial scan and baseline
+node bssid-geolocator.js -f corporate_aps.txt -j baseline_scan.json
+
+# Day 30: Detect moved/new access points
+node bssid-geolocator.js -f corporate_aps.txt --compare baseline_scan.json \
+  --movement-only --min-distance 10 -k movements.kml
+
+# Result: KML showing only APs that moved >10m with movement lines
+```
+
+**📈 Performance Stats:**
+- **Throughput**: Up to 50 concurrent BSSID lookups
+- **Accuracy**: Sub-15 meter precision in urban areas  
+- **Coverage**: Global Apple WPS database access
+- **Output**: JSON, KML, TSV, and formatted console output
+
+**🔧 Professional Use Cases:**
+- **Network Administration** - Track unauthorized AP movements
+- **Security Auditing** - Map corporate WiFi infrastructure  
+- **Research Projects** - Large-scale geolocation studies
+- **Asset Management** - Monitor hardware relocations
+
+## 📜 Disclaimer
 
 **Educational and Research Use Only**
 
 This project demonstrates WiFi geolocation techniques for educational purposes. Users are responsible for compliance with applicable laws and Apple's Terms of Service.
 
 - ✅ **Educational research and learning**
-- ✅ **Network security auditing (authorized)**  
-- ✅ **Infrastructure planning and analysis**
-- ❌ **Unauthorized tracking or surveillance**
-- ❌ **Commercial use without proper licensing**
 
----
-
-**⭐ Star this repo if you find it useful!**
 
 **🌐 Try it live:** [wifitracker.fun](https://wifitracker.fun)
