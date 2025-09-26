@@ -103,31 +103,21 @@ node scan_and_map.js
 node scan_and_map.js --debug
 ```
 
-**🎯 What it does:**
-- **🔍 Local WiFi Scanning** - Uses Windows `netsh` to discover ALL nearby networks
-- **🛡️ Security Audit** - Analyzes WEP/WPA/WPA3 security levels with color-coded warnings  
-- **📍 Mass Geolocation** - Geolocates every discovered BSSID via Apple's API
-- **📱 iPhone Simulation** - Shows how your iPhone triangulates using multiple access points
-- **🗺️ KML Export** - Generates Google Earth-compatible mapping files
-- **📊 Advanced Analytics** - Channel usage, density analysis, coverage statistics
-
 **Sample Output:**
 ```
-🏠 RÉSEAUX WiFi DÉTECTÉS - AUDIT DE SÉCURITÉ
+🏠 NETWORKS DETECTED - AUDIT
 ═══════════════════════════════════════════════════════════════════════════
-SSID                     BSSID              SÉCURITÉ      SIGNAL  CANAL  GÉOLOC
+SSID                     BSSID              SECUTITY      SIGNAL  CANAL  GEOLOC
 ──────────────────────────────────────────────────────────────────────────
 MyWiFi                   aa:bb:cc:dd:ee:ff  WPA2-AES      85%     6      ✅ OUI
-OpenNetwork              11:22:33:44:55:66  CRITIQUE      45%     11     ✅ OUI
-   ⚠️  Réseau ouvert - Aucune sécurité
+OpenNetwork              11:22:33:44:55:66  CRITIC      45%     11     ✅ OUI
 
-📱 SIMULATION iPhone : 47 points d'accès utilisés pour triangulation
-📍 Position estimée : 48.8566, 2.3522 (±15m précision)
+
+
 ```
 
 ### 🌍 **bssid-geolocator.js** - Advanced BSSID Intelligence
 
-**Production-grade geolocation engine** with enterprise features:
 
 ```bash
 # Single BSSID with detailed output
@@ -203,12 +193,6 @@ node bssid-geolocator.js -f corporate_aps.txt --compare baseline_scan.json \
 - **Accuracy**: Sub-15 meter precision in urban areas  
 - **Coverage**: Global Apple WPS database access
 - **Output**: JSON, KML, TSV, and formatted console output
-
-**🔧 Professional Use Cases:**
-- **Network Administration** - Track unauthorized AP movements
-- **Security Auditing** - Map corporate WiFi infrastructure  
-- **Research Projects** - Large-scale geolocation studies
-- **Asset Management** - Monitor hardware relocations
 
 ## 📜 Disclaimer
 
