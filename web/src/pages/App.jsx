@@ -14,7 +14,7 @@ import RealBSSIDDiscovery from '../components/RealBSSIDDiscovery'
 import TriangulationResults from '../components/TriangulationResults'
 import LayoutTextFlip from '../components/LayoutTextFlip'
 
-const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY || 'AIzaSyC3iMNJRat9QSKXgPsYTReF1mCYzQoDnVM'
+const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY || 'YOUR_GOOGLE_MAPS_API_KEY'
 
 function GoogleMap({ lat, lon }) {
   const src = useMemo(() => {
