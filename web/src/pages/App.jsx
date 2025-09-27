@@ -11,6 +11,8 @@ import CometCard from '../components/CometCard'
 import Pin3D from '../components/Pin3D'
 import BgLines from '../components/BgLines'
 import LayoutTextFlip from '../components/LayoutTextFlip'
+import GeographicalSurveillance from '../components/GeographicalSurveillance'
+import BSSIDTutorial from '../components/BSSIDTutorial'
 
 const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY || 'YOUR_GOOGLE_MAPS_API_KEY'
 
@@ -361,6 +363,10 @@ export default function App() {
     showOnlyRequested: false
   })
 
+  // State for geographical surveillance
+  const [showSurveillance, setShowSurveillance] = useState(false)
+  const [showBSSIDTutorial, setShowBSSIDTutorial] = useState(false)
+
 
   // Security helper functions
   const sanitizeInput = (input) => {
@@ -435,12 +441,12 @@ export default function App() {
       
       // Length validation after normalization
       if (normalizedBssid.length === 0) {
-        setError('BSSID ne peut pas être vide')
+        setError('BSSID cannot be empty')
         return
       }
       
       if (normalizedBssid.length > 17) { // Max length for XX:XX:XX:XX:XX:XX
-        setError('BSSID trop long après normalisation')
+        setError('BSSID too long after normalization')
         return
       }
       
@@ -455,7 +461,7 @@ export default function App() {
       // Final format validation with strict regex
       const re = /^([0-9A-F]{2}:){5}([0-9A-F]{2})$/
       if (!re.test(normalizedBssid)) {
-        setError('Format BSSID invalide. Utilisez HH:HH:HH:HH:HH:HH ou copiez depuis les réglages iPhone')
+        setError('Format BSSID invalid. Use HH:HH:HH:HH:HH:HH')
         return
       }
       
@@ -486,7 +492,7 @@ export default function App() {
       // Sanitize error messages to prevent XSS through error display
       const safeErrorMessage = typeof err.message === 'string' 
         ? err.message.replace(/[<>'"&]/g, '').substring(0, 200)
-        : 'Erreur inconnue'
+        : 'Error unknown'
       setError(safeErrorMessage)
     } finally {
       setLoading(false)
@@ -516,11 +522,11 @@ export default function App() {
                    className="text-xl sm:text-2xl md:text-3xl font-semibold tracking-tight"
                  />
                </div>
-               <p className="text-neutral-700 text-sm md:text-base px-1">Enter a BSSID to locate its position on Google Maps.</p>
+               <p className="text-neutral-700 text-sm md:text-base px-1">Enter a BSSID to locate its position.</p>
               <form onSubmit={onSubmit} className="mt-4 md:mt-6 space-y-3">
                 <input
                   className="w-full rounded-xl border border-white/60 bg-white/70 backdrop-blur px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-purple-500/60"
-                  placeholder="001122334455 or 00:11:22:33:44:55"
+                  placeholder="00:11:22:33:44:55"
                   value={bssid}
                   onChange={e => setBssid(e.target.value)}
                   inputMode="text"
@@ -529,7 +535,7 @@ export default function App() {
                   autoCapitalize="characters"
                   maxLength={100}
                   pattern="[0-9A-Fa-f:\-\s]*"
-                  title="Format BSSID: HH:HH:HH:HH:HH:HH (caractères hexadécimaux uniquement)"
+                  title="BSSID: HH:HH:HH:HH:HH:HH"
                   data-lpignore="true"
                   aria-describedby="bssid-help"
                 />
@@ -548,14 +554,46 @@ export default function App() {
                 </div>
               )}
               <div id="bssid-help" className="mt-2 text-xs text-neutral-600">
-                Formats acceptés : HH:HH:HH:HH:HH:HH, HH-HH-HH-HH-HH-HH, ou HHHHHHHHHHHH (copié iPhone)
+                Format : HH:HH:HH:HH:HH:HH, HH-HH-HH-HH-HH-HH, or HHHHHHHHHHHH
+                <div className="mt-2">
+                  <button 
+                    onClick={() => setShowBSSIDTutorial(true)}
+                    className="group inline-flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-blue-50 to-indigo-50 hover:from-blue-100 hover:to-indigo-100 border border-blue-200 hover:border-blue-300 rounded-lg text-blue-700 hover:text-blue-800 text-xs font-medium transition-all duration-200 shadow-sm hover:shadow-md"
+                  >
+                    <span className="text-sm">📖</span>
+                    <span>How to find your BSSID</span>
+                    <span className="text-xs opacity-70 group-hover:opacity-100 transition-opacity">Windows/Mac</span>
+                    <svg className="w-3 h-3 opacity-50 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </button>
+                </div>
               </div>
               
+              {/* Buttons for different modes */}
+              <div className="mt-4 text-center space-y-2">
+                <div className="flex flex-col sm:flex-row gap-2 justify-center">
+                  <button
+                    onClick={() => {
+                      setShowSurveillance(!showSurveillance)
+                    }}
+                    className="text-sm bg-gradient-to-r from-red-100 to-orange-100 hover:from-red-200 hover:to-orange-200 text-gray-800 px-4 py-2 rounded-lg font-medium transition-all duration-200 border border-red-200"
+                  >
+                    {showSurveillance ? '📍 Back to BSSID mode' : '🔍 Geographical Surveillance'}
+                  </button>
+                </div>
+              </div>
             </div>
             </CometCard>
             </Spotlight>
           </div>
 
+          {/* Geographical Surveillance interface */}
+          {showSurveillance && (
+            <div className="space-y-6">
+              <GeographicalSurveillance />
+            </div>
+          )}
 
           {result && (
             <div className="space-y-3">
@@ -645,6 +683,12 @@ export default function App() {
           <h3>Technical Specifications</h3>
           <p>Our WiFi tracker supports standard BSSID formats (HH:HH:HH:HH:HH:HH) and provides detailed information including coordinates, accuracy metrics, channel information, and timestamp data.</p>
         </div>
+
+        {/* BSSID Tutorial Popup */}
+        <BSSIDTutorial 
+          isOpen={showBSSIDTutorial}
+          onClose={() => setShowBSSIDTutorial(false)}
+        />
       </div>
     </AuroraBackground>
   )

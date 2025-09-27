@@ -29,6 +29,7 @@
     "inquirer": "^12.9.6",
     "p-limit": "^7.1.1",
     "protobufjs": "^7.5.4",
+    "sqlite3": "^5.1.7",
     "xmlbuilder2": "^3.1.1",
     "yargs": "^18.0.0"
   },
