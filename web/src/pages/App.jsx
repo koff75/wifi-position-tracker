@@ -10,8 +10,6 @@ import GlowingEffect from '../components/GlowingEffect'
 import CometCard from '../components/CometCard'
 import Pin3D from '../components/Pin3D'
 import BgLines from '../components/BgLines'
-import RealBSSIDDiscovery from '../components/RealBSSIDDiscovery'
-import TriangulationResults from '../components/TriangulationResults'
 import LayoutTextFlip from '../components/LayoutTextFlip'
 
 const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY || 'YOUR_GOOGLE_MAPS_API_KEY'
@@ -363,9 +361,6 @@ export default function App() {
     showOnlyRequested: false
   })
 
-  // State for iPhone triangulation
-  const [showTriangulation, setShowTriangulation] = useState(false)
-  const [triangulationResult, setTriangulationResult] = useState(null)
 
   // Security helper functions
   const sanitizeInput = (input) => {
@@ -498,19 +493,6 @@ export default function App() {
     }
   }
 
-  // Handle iPhone triangulation
-  const handleTriangulationComplete = (triangulationData) => {
-    setTriangulationResult(triangulationData)
-    console.log('🎯 Triangulation completed:', triangulationData)
-  }
-
-  // Select a BSSID from triangulation results
-  const handleSelectBssidFromTriangulation = (selectedBssid) => {
-    setBssid(selectedBssid)
-    setShowTriangulation(false)
-    // Scroll to main form
-    document.querySelector('form')?.scrollIntoView({ behavior: 'smooth' })
-  }
 
   return (
     <AuroraBackground>
@@ -569,41 +551,11 @@ export default function App() {
                 Formats acceptés : HH:HH:HH:HH:HH:HH, HH-HH-HH-HH-HH-HH, ou HHHHHHHHHHHH (copié iPhone)
               </div>
               
-              {/* Buttons for different modes */}
-              <div className="mt-4 text-center space-y-2">
-                <div className="flex flex-col sm:flex-row gap-2 justify-center">
-                  <button
-                    onClick={() => {
-                      setShowTriangulation(!showTriangulation)
-                    }}
-                    className="text-sm bg-gradient-to-r from-purple-100 to-pink-100 hover:from-purple-200 hover:to-pink-200 text-gray-800 px-4 py-2 rounded-lg font-medium transition-all duration-200 border border-purple-200"
-                  >
-                    {showTriangulation ? '📱 Back to BSSID mode' : '🎯 Real iPhone Triangulation'}
-                  </button>
-                </div>
-                <div className="text-xs text-neutral-600">
-                  {showTriangulation ? 'Use your connected network BSSID' : 
-                   'Discover ALL networks around your connected iPhone'}
-                </div>
-              </div>
             </div>
             </CometCard>
             </Spotlight>
           </div>
 
-          {/* iPhone triangulation interface */}
-          {showTriangulation && (
-            <div className="space-y-6">
-              <RealBSSIDDiscovery onDiscoveryComplete={handleTriangulationComplete} />
-              
-              {triangulationResult && (
-                <TriangulationResults 
-                  result={triangulationResult}
-                  onSelectBssid={handleSelectBssidFromTriangulation}
-                />
-              )}
-            </div>
-          )}
 
           {result && (
             <div className="space-y-3">
