@@ -367,15 +367,105 @@ export default function App() {
   const [showTriangulation, setShowTriangulation] = useState(false)
   const [triangulationResult, setTriangulationResult] = useState(null)
 
+  // Security helper functions
+  const sanitizeInput = (input) => {
+    if (typeof input !== 'string') return ''
+    
+    // Remove any potential XSS vectors
+    return input
+      .replace(/[<>'"&]/g, '') // Remove HTML/JS injection chars
+      .replace(/javascript:/gi, '') // Remove javascript: protocol
+      .replace(/data:/gi, '') // Remove data: protocol
+      .replace(/vbscript:/gi, '') // Remove vbscript: protocol
+      .replace(/on\w+=/gi, '') // Remove event handlers
+      .trim()
+  }
+
+  const validateBSSIDSecurity = (input) => {
+    // Length check to prevent buffer overflow attempts
+    if (input.length > 100) {
+      throw new Error('BSSID trop long - longueur maximale autorisée dépassée')
+    }
+    
+    // Character allowlist - only hex chars, separators, and spaces
+    const allowedChars = /^[0-9A-Fa-f:\-\s]*$/
+    if (!allowedChars.test(input)) {
+      throw new Error('Caractères non autorisés détectés dans le BSSID')
+    }
+    
+    // Check for potential injection patterns
+    const suspiciousPatterns = [
+      /script/gi,
+      /javascript/gi,
+      /vbscript/gi,
+      /onload/gi,
+      /onerror/gi,
+      /onclick/gi,
+      /<.*>/g,
+      /\{.*\}/g,
+      /\[.*\]/g,
+      /\$\{.*\}/g, // Template literals
+      /eval\(/gi,
+      /function\(/gi,
+      /=.*\(/g
+    ]
+    
+    for (const pattern of suspiciousPatterns) {
+      if (pattern.test(input)) {
+        throw new Error('Pattern de sécurité suspect détecté')
+      }
+    }
+  }
+
   async function onSubmit(e) {
     e.preventDefault()
     setError('')
     setResult(null)
     setAuditMode(false)
 
-    const re = /^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/
-    if (!re.test(bssid)) {
-      setError('Invalid BSSID format. Use HH:HH:HH:HH:HH:HH')
+    try {
+      // Security validation first
+      validateBSSIDSecurity(bssid)
+      
+      // Sanitize input
+      const sanitizedInput = sanitizeInput(bssid)
+      
+      // Normalize BSSID: remove spaces, normalize separators, convert to uppercase
+      let normalizedBssid = sanitizedInput.trim().toUpperCase()
+      
+      // Remove any remaining spaces
+      normalizedBssid = normalizedBssid.replace(/\s+/g, '')
+      
+      // Length validation after normalization
+      if (normalizedBssid.length === 0) {
+        setError('BSSID ne peut pas être vide')
+        return
+      }
+      
+      if (normalizedBssid.length > 17) { // Max length for XX:XX:XX:XX:XX:XX
+        setError('BSSID trop long après normalisation')
+        return
+      }
+      
+      // If no separators, add colons every 2 characters (for iPhone copy-paste format)
+      if (!/[:-]/.test(normalizedBssid) && normalizedBssid.length === 12) {
+        normalizedBssid = normalizedBssid.match(/.{2}/g).join(':')
+      }
+      
+      // Normalize separators to colons
+      normalizedBssid = normalizedBssid.replace(/-/g, ':')
+      
+      // Final format validation with strict regex
+      const re = /^([0-9A-F]{2}:){5}([0-9A-F]{2})$/
+      if (!re.test(normalizedBssid)) {
+        setError('Format BSSID invalide. Utilisez HH:HH:HH:HH:HH:HH ou copiez depuis les réglages iPhone')
+        return
+      }
+      
+      // Use normalized BSSID for the API call
+      setBssid(normalizedBssid)
+    } catch (securityError) {
+      setError(securityError.message)
       return
     }
 
@@ -385,7 +475,7 @@ export default function App() {
       const resp = await fetch('/api/geolocate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ bssid })
+        body: JSON.stringify({ bssid: normalizedBssid })
       })
 
       const data = await resp.json()
@@ -396,7 +486,11 @@ export default function App() {
       setResult(data)
       // Remove automatic audit popup as requested
     } catch (err) {
-      setError(err.message)
+      // Sanitize error messages to prevent XSS through error display
+      const safeErrorMessage = typeof err.message === 'string' 
+        ? err.message.replace(/[<>'"&]/g, '').substring(0, 200)
+        : 'Erreur inconnue'
+      setError(safeErrorMessage)
     } finally {
       setLoading(false)
     }
@@ -439,9 +533,9 @@ export default function App() {
                  />
                </div>
                <p className="text-neutral-700 text-sm md:text-base px-1">Enter a BSSID to locate its position on Google Maps.</p>
-              <form onSubmit={onSubmit} className="mt-4 md:mt-6 space-y-3 sm:space-y-0 sm:flex sm:gap-3">
+              <form onSubmit={onSubmit} className="mt-4 md:mt-6 space-y-3">
                 <input
-                  className="w-full sm:flex-1 rounded-xl border border-white/60 bg-white/70 backdrop-blur px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-purple-500/60"
+                  className="w-full rounded-xl border border-white/60 bg-white/70 backdrop-blur px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-purple-500/60"
                   placeholder="001122334455 or 00:11:22:33:44:55"
                   value={bssid}
                   onChange={e => setBssid(e.target.value)}
@@ -449,6 +543,11 @@ export default function App() {
                   autoComplete="off"
                   spellCheck="false"
                   autoCapitalize="characters"
+                  maxLength={100}
+                  pattern="[0-9A-Fa-f:\-\s]*"
+                  title="Format BSSID: HH:HH:HH:HH:HH:HH (caractères hexadécimaux uniquement)"
+                  data-lpignore="true"
+                  aria-describedby="bssid-help"
                 />
                 <StatefulButton
                   type="submit"
@@ -459,7 +558,14 @@ export default function App() {
                   {loading ? 'Searching…' : (result ? 'Found' : 'Locate')}
                 </StatefulButton>
               </form>
-              {error && <p className="mt-3 text-red-600">{error}</p>}
+              {error && (
+                <div className="mt-3 text-red-600 break-words" role="alert">
+                  {error}
+                </div>
+              )}
+              <div id="bssid-help" className="mt-2 text-xs text-neutral-600">
+                Formats acceptés : HH:HH:HH:HH:HH:HH, HH-HH-HH-HH-HH-HH, ou HHHHHHHHHHHH (copié iPhone)
+              </div>
               
               {/* Buttons for different modes */}
               <div className="mt-4 text-center space-y-2">
