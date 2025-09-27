@@ -423,6 +423,8 @@ export default function App() {
     setResult(null)
     setAuditMode(false)
 
+    let normalizedBssid // Déclarer la variable en dehors des blocs try-catch
+
     try {
       // Security validation first
       validateBSSIDSecurity(bssid)
@@ -431,7 +433,7 @@ export default function App() {
       const sanitizedInput = sanitizeInput(bssid)
       
       // Normalize BSSID: remove spaces, normalize separators, convert to uppercase
-      let normalizedBssid = sanitizedInput.trim().toUpperCase()
+      normalizedBssid = sanitizedInput.trim().toUpperCase()
       
       // Remove any remaining spaces
       normalizedBssid = normalizedBssid.replace(/\s+/g, '')
