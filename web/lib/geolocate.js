@@ -1,15 +1,155 @@
 const axios = require('axios');
 const https = require('https');
 
-// Utiliser le fichier bssid_pb.js local dans le même dossier lib/
-let bssidMessages;
-try {
-  bssidMessages = require('./bssid_pb');
-} catch (error) {
-  console.error("Erreur: Impossible de charger '/bssid_pb.js':", error.message);
-  throw error;
-}
+// BSSID protobuf définitions intégrées (pour éviter les dépendances externes)
+var $protobuf = require("protobufjs/minimal");
 
+// Common aliases
+var $Reader = $protobuf.Reader, $Writer = $protobuf.Writer, $util = $protobuf.util;
+
+// Exported root namespace
+var $root = $protobuf.roots["default"] || ($protobuf.roots["default"] = {});
+
+$root.bssid = (function() {
+    var bssid = {};
+
+    bssid.Location = (function() {
+        function Location(properties) {
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        Location.prototype.lat = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+        Location.prototype.lon = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+        Location.prototype.hacc = 0;
+        Location.prototype.zero = 0;
+        Location.prototype.altitude = 0;
+        Location.prototype.vacc = 0;
+        Location.prototype.unk1 = 0;
+        Location.prototype.unk2 = 0;
+
+        Location.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.bssid.Location();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.lat = reader.int64();
+                    break;
+                case 2:
+                    message.lon = reader.int64();
+                    break;
+                case 3:
+                    message.hacc = reader.int32();
+                    break;
+                case 4:
+                    message.zero = reader.int32();
+                    break;
+                case 5:
+                    message.altitude = reader.int32();
+                    break;
+                case 6:
+                    message.vacc = reader.int32();
+                    break;
+                case 7:
+                    message.unk1 = reader.int32();
+                    break;
+                case 8:
+                    message.unk2 = reader.int32();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        return Location;
+    })();
+
+    bssid.WiFi = (function() {
+        function WiFi(properties) {
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        WiFi.prototype.bssid = "";
+        WiFi.prototype.location = null;
+        WiFi.prototype.channel = 0;
+
+        WiFi.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.bssid.WiFi();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.bssid = reader.string();
+                    break;
+                case 2:
+                    message.location = $root.bssid.Location.decode(reader, reader.uint32());
+                    break;
+                case 3:
+                    message.channel = reader.int32();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        return WiFi;
+    })();
+
+    bssid.WiFiLocation = (function() {
+        function WiFiLocation(properties) {
+            this.wifi = [];
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        WiFiLocation.prototype.wifi = $util.emptyArray;
+
+        WiFiLocation.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.bssid.WiFiLocation();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    if (!(message.wifi && message.wifi.length))
+                        message.wifi = [];
+                    message.wifi.push($root.bssid.WiFi.decode(reader, reader.uint32()));
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        return WiFiLocation;
+    })();
+
+    return bssid;
+})();
+
+// Utiliser les définitions intégrées
+const bssidMessages = $root;
 const WiFiLocation = bssidMessages.bssid.WiFiLocation;
 
 const httpsAgent = new https.Agent({
