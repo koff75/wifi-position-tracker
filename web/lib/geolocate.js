@@ -1,81 +1,43 @@
 const axios = require('axios');
 const https = require('https');
 
-// Définitions protobuf intégrées pour éviter les dépendances externes
-const protobuf = require('protobufjs/minimal');
+// Utiliser protobufjs complet au lieu de minimal
+const protobuf = require('protobufjs');
 
-// Définition du schema protobuf inline
-const root = protobuf.Root.fromJSON({
-  "nested": {
-    "bssid": {
-      "nested": {
-        "WiFiLocation": {
-          "fields": {
-            "wifi": {
-              "rule": "repeated",
-              "type": "WiFi",
-              "id": 1
-            }
-          }
-        },
-        "WiFi": {
-          "fields": {
-            "bssid": {
-              "type": "string", 
-              "id": 1
-            },
-            "location": {
-              "type": "Location",
-              "id": 2
-            },
-            "channel": {
-              "type": "int32",
-              "id": 3
-            }
-          }
-        },
-        "Location": {
-          "fields": {
-            "lat": {
-              "type": "int64",
-              "id": 1
-            },
-            "lon": {
-              "type": "int64", 
-              "id": 2
-            },
-            "hacc": {
-              "type": "int32",
-              "id": 3
-            },
-            "zero": {
-              "type": "int32",
-              "id": 4
-            },
-            "altitude": {
-              "type": "int32",
-              "id": 5
-            },
-            "vacc": {
-              "type": "int32",
-              "id": 6
-            },
-            "unk1": {
-              "type": "int32",
-              "id": 7
-            },
-            "unk2": {
-              "type": "int32",
-              "id": 8
-            }
-          }
-        }
-      }
-    }
-  }
-});
+// Créer les types protobuf manuellement
+const root = new protobuf.Root();
 
-const WiFiLocation = root.lookupType("bssid.WiFiLocation");
+// Définir le namespace bssid
+const bssidNamespace = root.define("bssid");
+
+// Définir le type Location
+const Location = new protobuf.Type("Location")
+  .add(new protobuf.Field("lat", 1, "int64"))
+  .add(new protobuf.Field("lon", 2, "int64"))
+  .add(new protobuf.Field("hacc", 3, "int32"))
+  .add(new protobuf.Field("zero", 4, "int32"))
+  .add(new protobuf.Field("altitude", 5, "int32"))
+  .add(new protobuf.Field("vacc", 6, "int32"))
+  .add(new protobuf.Field("unk1", 7, "int32"))
+  .add(new protobuf.Field("unk2", 8, "int32"));
+
+// Définir le type WiFi
+const WiFi = new protobuf.Type("WiFi")
+  .add(new protobuf.Field("bssid", 1, "string"))
+  .add(new protobuf.Field("location", 2, "Location"))
+  .add(new protobuf.Field("channel", 3, "int32"));
+
+// Définir le type WiFiLocation
+const WiFiLocation = new protobuf.Type("WiFiLocation")
+  .add(new protobuf.Field("wifi", 1, "WiFi", "repeated"));
+
+// Ajouter les types au namespace
+bssidNamespace.add(Location);
+bssidNamespace.add(WiFi);
+bssidNamespace.add(WiFiLocation);
+
+// Résoudre tous les types
+root.resolveAll();
 
 const httpsAgent = new https.Agent({
   rejectUnauthorized: false,
