@@ -14,7 +14,6 @@ function normalizeBssid(bssid) {
 }
 
 module.exports = async function handler(req, res) {
-  console.log("Call web/api/geolocate");
   if (req.method !== 'POST') {
     res.setHeader('Allow', ['POST']);
     return res.status(405).json({ success: false, message: 'Method Not Allowed' });
