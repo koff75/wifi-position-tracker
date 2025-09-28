@@ -1,15 +1,81 @@
 const axios = require('axios');
 const https = require('https');
 
-let bssidMessages;
-try {
-  bssidMessages = require('../bssid_pb');
-} catch (error) {
-  console.error("Erreur: Impossible de charger 'bssid_pb.js'. /lib'.");
-  throw error;
-}
+// Définitions protobuf intégrées pour éviter les dépendances externes
+const protobuf = require('protobufjs/minimal');
 
-const WiFiLocation = bssidMessages.bssid.WiFiLocation;
+// Définition du schema protobuf inline
+const root = protobuf.Root.fromJSON({
+  "nested": {
+    "bssid": {
+      "nested": {
+        "WiFiLocation": {
+          "fields": {
+            "wifi": {
+              "rule": "repeated",
+              "type": "WiFi",
+              "id": 1
+            }
+          }
+        },
+        "WiFi": {
+          "fields": {
+            "bssid": {
+              "type": "string", 
+              "id": 1
+            },
+            "location": {
+              "type": "Location",
+              "id": 2
+            },
+            "channel": {
+              "type": "int32",
+              "id": 3
+            }
+          }
+        },
+        "Location": {
+          "fields": {
+            "lat": {
+              "type": "int64",
+              "id": 1
+            },
+            "lon": {
+              "type": "int64", 
+              "id": 2
+            },
+            "hacc": {
+              "type": "int32",
+              "id": 3
+            },
+            "zero": {
+              "type": "int32",
+              "id": 4
+            },
+            "altitude": {
+              "type": "int32",
+              "id": 5
+            },
+            "vacc": {
+              "type": "int32",
+              "id": 6
+            },
+            "unk1": {
+              "type": "int32",
+              "id": 7
+            },
+            "unk2": {
+              "type": "int32",
+              "id": 8
+            }
+          }
+        }
+      }
+    }
+  }
+});
+
+const WiFiLocation = root.lookupType("bssid.WiFiLocation");
 
 const httpsAgent = new https.Agent({
   rejectUnauthorized: false,
@@ -55,6 +121,7 @@ async function geolocateApple(bssid, { debug = false } = {}) {
       console.log('[DEBUG] HTTP', response.status, 'bytes', Buffer.byteLength(response.data));
       console.log('[DEBUG] resp.slice10.len', responseData.length);
     }
+    
     const bssidResponse = WiFiLocation.decode(responseData);
     if (debug) console.log('[DEBUG] decoded.wifi.count', (bssidResponse.wifi || []).length);
 
@@ -98,10 +165,9 @@ async function geolocateApple(bssid, { debug = false } = {}) {
     }
     return geos;
   } catch (error) {
+    console.error('Geolocate error:', error);
     return [];
   }
 }
 
 module.exports = { geolocateApple };
-
-
