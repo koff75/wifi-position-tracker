@@ -1,12 +1,19 @@
 const axios = require('axios');
 const https = require('https');
 
+// Chargement sécurisé de bssid_pb
 let bssidMessages;
 try {
-  bssidMessages = require('./bssid_pb.js');
+  // Essayer d'abord le chemin local
+  bssidMessages = require('./bssid_pb');
 } catch (error) {
-  console.error("Erreur: Impossible de charger 'bssid_pb.js'. /web/lib'.");
-  throw error;
+  try {
+    // Fallback vers le chemin parent
+    bssidMessages = require('../bssid_pb');
+  } catch (error2) {
+    console.error("Erreur: Impossible de charger bssid_pb.js:", error.message, error2.message);
+    throw new Error("Module bssid_pb non trouvé");
+  }
 }
 
 const WiFiLocation = bssidMessages.bssid.WiFiLocation;
