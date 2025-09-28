@@ -32,6 +32,7 @@ module.exports = async function handler(req, res) {
     return res.status(200).json({ success: true, location: firstValid });
   } catch (e) {
     console.error('api/geolocate error', e);
-    return res.status(500).json({ success: false, message: 'Erreur serveur' });
+    console.error('Stack trace:', e.stack);
+    return res.status(500).json({ success: false, message: 'Erreur serveur', error: e.message });
   }
 };
