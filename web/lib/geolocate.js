@@ -1,43 +1,16 @@
 const axios = require('axios');
 const https = require('https');
 
-// Utiliser protobufjs complet au lieu de minimal
-const protobuf = require('protobufjs');
+// Utiliser le fichier bssid_pb.js local dans le même dossier lib/
+let bssidMessages;
+try {
+  bssidMessages = require('./bssid_pb');
+} catch (error) {
+  console.error("Erreur: Impossible de charger '/bssid_pb.js':", error.message);
+  throw error;
+}
 
-// Créer les types protobuf manuellement
-const root = new protobuf.Root();
-
-// Définir le namespace bssid
-const bssidNamespace = root.define("bssid");
-
-// Définir le type Location
-const Location = new protobuf.Type("Location")
-  .add(new protobuf.Field("lat", 1, "int64"))
-  .add(new protobuf.Field("lon", 2, "int64"))
-  .add(new protobuf.Field("hacc", 3, "int32"))
-  .add(new protobuf.Field("zero", 4, "int32"))
-  .add(new protobuf.Field("altitude", 5, "int32"))
-  .add(new protobuf.Field("vacc", 6, "int32"))
-  .add(new protobuf.Field("unk1", 7, "int32"))
-  .add(new protobuf.Field("unk2", 8, "int32"));
-
-// Définir le type WiFi
-const WiFi = new protobuf.Type("WiFi")
-  .add(new protobuf.Field("bssid", 1, "string"))
-  .add(new protobuf.Field("location", 2, "Location"))
-  .add(new protobuf.Field("channel", 3, "int32"));
-
-// Définir le type WiFiLocation
-const WiFiLocation = new protobuf.Type("WiFiLocation")
-  .add(new protobuf.Field("wifi", 1, "WiFi", "repeated"));
-
-// Ajouter les types au namespace
-bssidNamespace.add(Location);
-bssidNamespace.add(WiFi);
-bssidNamespace.add(WiFiLocation);
-
-// Résoudre tous les types
-root.resolveAll();
+const WiFiLocation = bssidMessages.bssid.WiFiLocation;
 
 const httpsAgent = new https.Agent({
   rejectUnauthorized: false,
