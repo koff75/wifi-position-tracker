@@ -5,7 +5,7 @@ let bssidMessages;
 try {
   bssidMessages = require('../bssid_pb');
 } catch (error) {
-  console.error("Erreur: Impossible de charger 'bssid_pb.js'. /lib'.");
+  console.error("Erreur: Impossible de charger 'bssid_pb.js'. web/lib'.");
   throw error;
 }
 
