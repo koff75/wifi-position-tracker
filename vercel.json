@@ -1,27 +1,21 @@
 {
-  "version": 2,
-  "outputDirectory": "web/dist",
-  "builds": [
-    {
-      "src": "web/package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "dist"
+    "$schema": "https://openapi.vercel.sh/vercel.json",
+    "version": 2,
+    "outputDirectory": "web/dist",
+    "builds": [
+      {
+        "src": "web/package.json",
+        "use": "@vercel/static-build",
+        "config": { "distDir": "dist" }
+      },
+      {
+        "src": "web/api/**/*.js",
+        "use": "@vercel/node"
       }
-    },
-    {
-      "src": "web/api/**/*.js",
-      "use": "@vercel/node"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/api/(.*)",
-      "dest": "/web/api/$1"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/web/dist/$1"
-    }
-  ]
-}
+    ],
+    "rewrites": [
+      { "source": "/api/:path*", "destination": "/api/:path*" },
+      { "source": "/:path*", "destination": "/index.html" }
+    ]
+  }
+  
