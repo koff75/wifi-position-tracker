@@ -29,7 +29,12 @@ module.exports = async function handler(req, res) {
       return res.status(404).json({ success: false, message: 'Aucune localisation trouvée pour ce BSSID.' });
     }
     const firstValid = results.find(r => r && !isNaN(r.lat) && !isNaN(r.lon) && r.lat !== -180 && r.lon !== -180) || results[0];
-    return res.status(200).json({ success: true, location: firstValid });
+    return res.status(200).json({ 
+      success: true, 
+      location: firstValid,
+      allNetworks: results,
+      requestedBSSID: normalizedBssid
+    });
   } catch (e) {
     console.error('api/geolocate error', e);
     console.error('Stack trace:', e.stack);
