@@ -4,8 +4,6 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# Generated protobuf files
-bssid_pb.js
 
 # Output files
 *.kml
